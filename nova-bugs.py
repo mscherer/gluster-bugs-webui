@@ -95,7 +95,7 @@ def main():
         nova_owner = 'Unknown'
 
         for task in bug.bug_tasks:
-            if task.bug_target_name == 'nova':
+            if task.bug_target_name == LPPROJECT:
                 nova_status = task.status
                 nova_owner = task.assignee
                 break
