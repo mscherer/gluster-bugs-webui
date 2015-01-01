@@ -33,7 +33,9 @@ LPPROJECT = os.environ.get('LPPROJECT',
 LPSTATUS = ('New', 'Confirmed', 'Triaged', 'In Progress')
 LPIMPORTANCE = ('Critical', 'High', 'Medium', 'Undecided', 'Low', 'Wishlist')
 
-RE_LINK = re.compile(' https://review.openstack.org/(\d+)')
+GERRIT_URL = "https://review.openstack.org"
+
+RE_LINK = re.compile(' %s/(\d+)' % GERRIT_URL)
 
 
 def get_reviews_from_bug(bug):
@@ -46,8 +48,8 @@ def get_reviews_from_bug(bug):
 
 def get_review_status(review_number):
     """Return status of a given review number."""
-    r = requests.get("https://review.openstack.org:443/changes/%s"
-                     % review_number)
+    r = requests.get("%s/changes/%s"
+                     % (GERRIT_URL, review_number))
     # strip off first few chars because 'the JSON response body starts with a
     # magic prefix line that must be stripped before feeding the rest of the
     # response body to a JSON parser'
@@ -157,9 +159,9 @@ def main():
             i += 1
             review_status = review_status.replace("\n", "")
             bug_data += ('{"review": '
-                         '"https://review.openstack.org/%s",'
+                         '"%s/%s",'
                          '"status": "%s"}'
-                         % (review, review_status))
+                         % (GERRIT_URL, review, review_status))
         bug_data += (']}')
 
         try:
