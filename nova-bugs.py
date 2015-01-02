@@ -94,7 +94,7 @@ def main():
 #    for task in project.searchTasks(status=LPSTATUS, importance=LPIMPORTANCE,
 #                                    omit_duplicates=True,
 #                                    order_by='-importance'):
-    bzq = bz.build_query(product=LPPROJECT, status=LPSTATUS)
+    bzq = bz.build_query(product=LPPROJECT, status=BZSTATUS)
     #bzq = bz.build_query(bug_id='1154635')
     bugs = bz.query(bzq)
     for task in bugs:
