@@ -33,6 +33,9 @@ LPPROJECT = os.environ.get('LPPROJECT',
 LPSTATUS = ('New', 'Confirmed', 'Triaged', 'In Progress')
 LPIMPORTANCE = ('Critical', 'High', 'Medium', 'Undecided', 'Low', 'Wishlist')
 
+BZSTATUS = ('NEW', 'ASSIGNED', 'POST', 'MODIFIED', 'ON_QA')
+BZPRIORITY = ('urgent', 'high', 'medium', 'unspecified', 'low')
+
 GERRIT_URL = "https://review.openstack.org"
 
 RE_LINK = re.compile(' %s/(\d+)' % GERRIT_URL)
@@ -41,7 +44,7 @@ RE_LINK = re.compile(' %s/(\d+)' % GERRIT_URL)
 def get_reviews_from_bug(bug):
     """Return a list of gerrit reviews extracted from the bug's comments."""
     reviews = set()
-    for comment in bug.messages:
+    for comment in bug.comments:
         reviews |= set(RE_LINK.findall(comment.content))
     return reviews
 
@@ -84,27 +87,29 @@ def main():
     f = open('bugs-refresh.json', 'w')
     f.write('{"date": "%s", "bugs": [' % datetime.datetime.now())
 
-    for task in project.searchTasks(status=LPSTATUS, importance=LPIMPORTANCE,
-                                    omit_duplicates=True,
-                                    order_by='-importance'):
+#    for task in project.searchTasks(status=LPSTATUS, importance=LPIMPORTANCE,
+#                                    omit_duplicates=True,
+#                                    order_by='-importance'):
+    bzq = bz.build_query(product=LPPROJECT, status=LPSTATUS)
+    for task in bz.query(bzq):
         #if counter == 300:
         #    break
-        bug = launchpad.load(task.bug_link)
-
-        nova_status = 'Unknown'
-        nova_owner = 'Unknown'
-
-        for task in bug.bug_tasks:
-            if task.bug_target_name == LPPROJECT:
-                nova_status = task.status
-                nova_owner = task.assignee
-                break
+#        bug = launchpad.load(task.bug_link)
+#
+#        nova_status = 'Unknown'
+#        nova_owner = 'Unknown'
+#
+#        for task in bug.bug_tasks:
+#            if task.bug_target_name == LPPROJECT:
+#                nova_status = task.status
+#                nova_owner = task.assignee
+#                break
         try:
             if counter != 0:
                 bug_data = ','
             else:
                 bug_data = ""
-            title = bug.title.replace('"', "'")
+            title = task.summary.replace('"', "'")
             title = title.replace("\n", "")
             title = title.replace("\t", "")
             bug_data += ('{"index": %d, "id": %d, "importance": "%s", '
@@ -113,24 +118,26 @@ def main():
                          '"title": "%s", '
                          '"link": "%s"' % (
                              counter,
-                             bug.id,
-                             task.importance,
-                             nova_status,
-                             nova_owner,
+                             task.id,
+                             task.priority,
+                             task.status,
+                             task.assignee,
                              title,
-                             task.web_link))
+                             task.weburl))
 
         except (TypeError, UnicodeEncodeError):
             # TODO: fix this
-            print 'Error on bug %d', bug.id
+            print 'Error on bug %d', task.id
             counter += 1
             continue
 
-        age = delta(bug.date_created)
+        creation_time = datetime.datetime.strptime(task.creation_time, "%Y%m%dT%H:%M:%S")
+        last_updated = datetime.datetime.strptime(task.last_change_time, "%Y%m%dT%H:%M:%S")
+        age = delta(task.creation_time)
         updated = delta(bug.date_last_updated)
         stale = False
         if updated > 30 and age > 30:
-            if nova_status == 'In Progress':
+            if nova_status == 'ASSIGNED':
                 stale = True
         bug_data += (',"age": %d, "update": %d, "stale": %d, '
                      '"never_touched": %d' %
@@ -139,20 +146,11 @@ def main():
 
         i = 0
         bug_data += ( ',"projects": [')
-
-        for line in map(lambda x: '{"target": "%s", "status": '
-                                  '"%s"}' %
-                (x.bug_target_name, x.status),
-                        bug.bug_tasks):
-            if i != 0:
-                bug_data += (",")
-            i += 1
-            bug_data += (line)
-
+        bug_data += '{"target": "%s", "status": "%s"}' % (task.target_release, task.status)
         bug_data += ('] ,"reviews": [')
 
         i = 0
-        for review in get_reviews_from_bug(bug):
+        for review in get_reviews_from_bug(task):
             review_status = get_review_status(review)
             if i != 0:
                 bug_data += (",")
