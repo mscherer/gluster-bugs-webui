@@ -46,7 +46,7 @@ RE_LINK = re.compile(' %s/(\d+)' % GERRIT_URL)
 def get_reviews_from_bug(bug):
     """Return a list of gerrit reviews extracted from the bug's comments."""
     reviews = set()
-    for comment in bug.comments:
+    for comment in bug.comments[1:]:
         reviews |= set(RE_LINK.findall(comment['text']))
     return reviews
 
