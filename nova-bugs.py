@@ -145,8 +145,7 @@ def main():
                 stale = True
         bug_data += (',"age": %d, "update": %d, "stale": %d, '
                      '"never_touched": %d' %
-                     (age, updated, 1 if stale else 0, 1 if (age ==
-                                                             updated) else 0))
+                     (age, updated, 1 if stale else 0, 1 if len(task.comments) == 1 else 0))
 
         i = 0
         bug_data += ( ',"projects": [')
