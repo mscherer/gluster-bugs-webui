@@ -50,7 +50,7 @@ table {
         background-position: 0 -3536px
     }
 
-    .bug-critical {
+    .bug-urgent {
         background-image: url(inline-sprites-1.png);
         background-repeat: no-repeat;
         background-position: 0 -3650px
@@ -270,7 +270,7 @@ table {
 		 border-width: 0 0 1px 0;
     }
 
-    .importanceCRITICAL, .importanceCRITICAL a {
+    .importanceURGENT, .importanceURGENT a {
 		 border-width: 0 0 1px 0;
         background-color: #DF382C;
         color: white
@@ -300,7 +300,7 @@ table {
         color: white
     }
 
-    .importanceUNDECIDED, .importanceUNDECIDED a {
+    .importanceUNSPECIFIED, .importanceUNSPECIFIED a {
 		 border-width: 0 0 1px 0;
         background-color: #999;
         color: white

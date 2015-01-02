@@ -13,16 +13,11 @@ app.controller("BugCtrl", function ($scope) {
 
     console.log($scope.date);
     for (var i = 0, l = $scope.raw_data.length; i < l; i++) {
-        var owner = $scope.raw_data[i].owner;
-        if (owner != "Unknown")
-            $scope.raw_data[i].parsed_owner = owner.substring(31);
-        else
-            $scope.raw_data[i].parsed_owner = owner;
         try {
             $scope.raw_data[i].status_prio = "status" + $scope.raw_data[i].status.toUpperCase().replace(" ", "");
         }
         catch (exception) {
-            $scope.raw_data[i].status_prio = "unknown";
+            $scope.raw_data[i].status_prio = "unspecified";
         }
         try {
             $scope.raw_data[i].prio_class = "importance" + $scope.raw_data[i].importance.toUpperCase();
@@ -87,7 +82,7 @@ app.controller("BugCtrl", function ($scope) {
     function filterUndecided() {
         for (var i = 0, l = $scope.raw_data.length; i < l; i++) {
             var item = $scope.raw_data[i];
-            if (item.importance == "Undecided") {
+            if (item.importance == "unspecified") {
                 $scope.filtered_data.push(item);
             }
         }
