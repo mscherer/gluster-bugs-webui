@@ -1,6 +1,6 @@
 // JavaScript Document
 
-var app = angular.module("NovaBugs", []);
+var app = angular.module("GlusterBugs", []);
 
 app.controller("BugCtrl", function ($scope) {
     $scope.priority = "High";
