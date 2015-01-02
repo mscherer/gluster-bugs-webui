@@ -3,7 +3,7 @@
 var app = angular.module("NovaBugs", []);
 
 app.controller("BugCtrl", function ($scope) {
-    $scope.priority = "Critical";
+    $scope.priority = "High";
     $scope.orderList = "importance";
     $scope.filterSelection = "all";
     $scope.data = angular.fromJson(FileHelper.readStringFromFileAtPath("bugs.json"));
@@ -145,7 +145,7 @@ app.controller("BugCtrl", function ($scope) {
     function filterInProgress() {
         for (var i = 0, l = $scope.raw_data.length; i < l; i++) {
             var item = $scope.raw_data[i];
-            if (item.status == "In Progress") {
+            if (item.status == "ASSIGNED") {
                 $scope.filtered_data.push(item);
             }
         }
@@ -154,7 +154,7 @@ app.controller("BugCtrl", function ($scope) {
     function filterNoOwner() {
         for (var i = 0, l = $scope.raw_data.length; i < l; i++) {
             var item = $scope.raw_data[i];
-            if (item.owner == "None") {
+            if (item.owner == "bugs@gluster.org") {
                 $scope.filtered_data.push(item);
             }
         }
@@ -162,7 +162,7 @@ app.controller("BugCtrl", function ($scope) {
     function filterOwnerAbandoned() {
         for (var i = 0, l = $scope.raw_data.length; i < l; i++) {
             var item = $scope.raw_data[i];
-            if (item.owner != "None" && item.stale == 1) {
+            if (item.owner != "bugs@gluster.org" && item.stale == 1) {
                 $scope.filtered_data.push(item);
             }
         }

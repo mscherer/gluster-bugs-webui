@@ -23,7 +23,8 @@ import os
 import re
 import sys
 
-from launchpadlib.launchpad import Launchpad
+#from launchpadlib.launchpad import Launchpad
+from bugzilla import Bugzilla
 import requests
 
 LPCACHEDIR = os.path.expanduser(os.environ.get('LPCACHEDIR',
@@ -33,10 +34,11 @@ LPPROJECT = os.environ.get('LPPROJECT',
 LPSTATUS = ('New', 'Confirmed', 'Triaged', 'In Progress')
 LPIMPORTANCE = ('Critical', 'High', 'Medium', 'Undecided', 'Low', 'Wishlist')
 
+BZURL = "https://bugzilla.redhat.com/xmlrpc.cgi"
 BZSTATUS = ('NEW', 'ASSIGNED', 'POST', 'MODIFIED', 'ON_QA')
 BZPRIORITY = ('urgent', 'high', 'medium', 'unspecified', 'low')
 
-GERRIT_URL = "https://review.openstack.org"
+GERRIT_URL = "http://review.gluster.org"
 
 RE_LINK = re.compile(' %s/(\d+)' % GERRIT_URL)
 
@@ -45,7 +47,7 @@ def get_reviews_from_bug(bug):
     """Return a list of gerrit reviews extracted from the bug's comments."""
     reviews = set()
     for comment in bug.comments:
-        reviews |= set(RE_LINK.findall(comment.content))
+        reviews |= set(RE_LINK.findall(comment['text']))
     return reviews
 
 
@@ -76,10 +78,12 @@ def main():
 
     args = parser.parse_args()
 
-    launchpad = Launchpad.login_anonymously('OpenStack Infra Bugday',
-                                            'production',
-                                            LPCACHEDIR)
-    project = launchpad.projects[LPPROJECT]
+#    launchpad = Launchpad.login_anonymously('OpenStack Infra Bugday',
+#                                            'production',
+#                                            LPCACHEDIR)
+#    project = launchpad.projects[LPPROJECT]
+    bz = Bugzilla(url=BZURL)
+
     counter = 0
 
     nova_status = "Unknown"
@@ -91,7 +95,9 @@ def main():
 #                                    omit_duplicates=True,
 #                                    order_by='-importance'):
     bzq = bz.build_query(product=LPPROJECT, status=LPSTATUS)
-    for task in bz.query(bzq):
+    #bzq = bz.build_query(bug_id='1154635')
+    bugs = bz.query(bzq)
+    for task in bugs:
         #if counter == 300:
         #    break
 #        bug = launchpad.load(task.bug_link)
@@ -121,7 +127,7 @@ def main():
                              task.id,
                              task.priority,
                              task.status,
-                             task.assignee,
+                             task.assigned_to,
                              title,
                              task.weburl))
 
@@ -131,10 +137,8 @@ def main():
             counter += 1
             continue
 
-        creation_time = datetime.datetime.strptime(task.creation_time, "%Y%m%dT%H:%M:%S")
-        last_updated = datetime.datetime.strptime(task.last_change_time, "%Y%m%dT%H:%M:%S")
-        age = delta(task.creation_time)
-        updated = delta(bug.date_last_updated)
+        age = delta(datetime.datetime.strptime("%s" % task.creation_time, "%Y%m%dT%H:%M:%S"))
+        updated = delta(datetime.datetime.strptime("%s" % task.last_change_time, "%Y%m%dT%H:%M:%S"))
         stale = False
         if updated > 30 and age > 30:
             if nova_status == 'ASSIGNED':
