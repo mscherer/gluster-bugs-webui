@@ -14,5 +14,5 @@ WORKDIR="$(dirname "${SELF}")"
 
 cd ${WORKDIR}
 
-python nova-bugs.py
+python gluster-bugs.py
 mv bugs-refresh.json bugs.json

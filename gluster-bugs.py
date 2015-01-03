@@ -30,7 +30,7 @@ import requests
 LPCACHEDIR = os.path.expanduser(os.environ.get('LPCACHEDIR',
                                                '~/.launchpadlib/cache'))
 LPPROJECT = os.environ.get('LPPROJECT',
-                           'nova')
+                           'GlusterFS')
 LPSTATUS = ('New', 'Confirmed', 'Triaged', 'In Progress')
 LPIMPORTANCE = ('Critical', 'High', 'Medium', 'Undecided', 'Low', 'Wishlist')
 
