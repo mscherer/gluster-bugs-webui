@@ -141,7 +141,7 @@ def main():
         updated = delta(datetime.datetime.strptime("%s" % task.last_change_time, "%Y%m%dT%H:%M:%S"))
         stale = False
         if updated > 30 and age > 30:
-            if nova_status == 'ASSIGNED':
+            if task.status == 'ASSIGNED':
                 stale = True
         bug_data += (',"age": %d, "update": %d, "stale": %d, '
                      '"never_touched": %d' %
