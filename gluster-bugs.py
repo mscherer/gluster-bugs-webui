@@ -172,7 +172,7 @@ def main():
                 json.loads(bug_data[1:])
             f.write(bug_data)
         except (ValueError, UnicodeEncodeError), e:
-            print e, bug_data
+            print e, '[Bug: %s]' % task.id
 
         counter += 1
 
