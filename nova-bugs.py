@@ -114,7 +114,7 @@ def main():
             if counter != 0:
                 bug_data = ','
             else:
-                bug_data = ""
+                bug_data = u""
             title = task.summary.replace('"', "'")
             title = title.replace("\n", "")
             title = title.replace("\t", "")
@@ -166,14 +166,14 @@ def main():
         bug_data += (']}')
 
         try:
-
             if counter == 0:
                 json.loads(bug_data)
             else:
                 json.loads(bug_data[1:])
             f.write(bug_data)
-        except ValueError, e:
+        except (ValueError, UnicodeEncodeError), e:
             print e, bug_data
+
         counter += 1
 
     f.write(']}')
