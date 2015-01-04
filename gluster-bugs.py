@@ -72,6 +72,14 @@ def delta(date_value):
     return delta.days
 
 
+def getBugPriority(bug):
+    prio = bug.priority
+    if 'FutureFeature' in bug.keywords:
+        prio = 'Wishlist'
+
+    return prio
+
+
 def main():
     parser = argparse.ArgumentParser(description='pull all bugs from a '
                                                  'launchpad project')
@@ -125,7 +133,7 @@ def main():
                          '"link": "%s"' % (
                              counter,
                              task.id,
-                             task.priority,
+                             getBugPriority(task),
                              task.status,
                              task.assigned_to,
                              title,
