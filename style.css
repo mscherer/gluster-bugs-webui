@@ -255,12 +255,12 @@ table {
         background-color: #cbe7ef
     }
 
-    .statusFIXCOMMITTED, .statusFIXCOMMITTED a {
+    .statusMODIFIED, .statusMODIFIED a {
 		 border-width: 0 0 1px 0;
         color: #050
     }
 
-    .statusFIXRELEASED, .statusFIXRELEASED a {
+    .statusON_QA, .statusON_QA a {
 		 border-width: 0 0 1px 0;
         color: green
     }
