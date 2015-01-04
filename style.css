@@ -248,7 +248,7 @@ table {
         background-color: #f4f1a4
     }
 
-    .statusINPROGRESS, .statusINPROGRESS a {
+    .statusASSIGNED, .statusASSIGNED a {
 		 border-width: 0 0 1px 0;
         /* color: black */
 		color: #137587;
