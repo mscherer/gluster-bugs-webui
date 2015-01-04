@@ -80,6 +80,14 @@ def getBugPriority(bug):
     return prio
 
 
+def getBugStatus(bug):
+    status = bug.status
+    if status == 'NEW' and 'Triaged' in bug.keywords:
+        status = 'Triaged'
+
+    return status
+
+
 def main():
     parser = argparse.ArgumentParser(description='pull all bugs from a '
                                                  'launchpad project')
@@ -134,7 +142,7 @@ def main():
                              counter,
                              task.id,
                              getBugPriority(task),
-                             task.status,
+                             getBugStatus(task),
                              task.assigned_to,
                              title,
                              task.weburl))
