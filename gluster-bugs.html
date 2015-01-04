@@ -25,38 +25,58 @@ Search: <input type="text" id="query" ng-model="query"/>
 </select>
 
 <form name="myForm" novalidate>
+    <label>
     <input type="radio" name="all-radio" ng-change='FilterCtrl()'
            ng-model="filterSelection" value="all" checked="checked">
     All
+    </label>
+    <label>
     <input type="radio" name="value-radio" ng-change="FilterCtrl()"
            ng-model="filterSelection" value="stale">
     Not updated in the last month
+    </label>
+    <label>
     <input type="radio" name="update-radio" ng-change="FilterCtrl()"
            ng-model="filterSelection" value="update">
     Never updated
+    </label>
+    <label>
     <input type="radio" name="progress-radio" ng-change="FilterCtrl()"
            ng-model="filterSelection" value="inProgress">
     In Progress
+    </label>
+    <label>
     <input type="radio" name="undecided-radio" ng-change="FilterCtrl()"
            ng-model="filterSelection" value="undecided">
     Undecided
+    </label>
+    <label>
     <input type="radio" name="owner-radio" ng-change="FilterCtrl()"
            ng-model="filterSelection" value="noOwner">
     No Owner
+    </label>
     <br>
+    <label>
     <input type="radio" name="owner-abandoned-radio" ng-change="FilterCtrl()"
            ng-model="filterSelection" value="ownerAbandoned">
     Owner has no update in 30 days
+    </label>
     <br>
+    <label>
     <input type="radio" name="abandoned-radio" ng-change="FilterCtrl()"
            ng-model="filterSelection" value="abandoned">
     In Progress, but all Abandoned
+    </label>
+    <label>
     <input type="radio" name="merged-radio" ng-change="FilterCtrl()"
            ng-model="filterSelection" value="merged">
     In Progress, but all Merged
+    </label>
+    <label>
     <input type="radio" name="review-radio" ng-change="FilterCtrl()"
            ng-model="filterSelection" value="review">
     Ready For Review
+    </label>
     <br>
 
 </form>
