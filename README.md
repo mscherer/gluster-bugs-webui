@@ -1,6 +1,6 @@
-To run the report manually
+##To run the report manually
 
-$ python nova-bugs.py
+$ bash run-report.sh
 
 You may see some error output when the description contains funky characters.  
 These bugs are dropped from the report, so I usually manualy fix the bug titles 
@@ -14,3 +14,5 @@ Once the report is done (it takes about 1/2 hour currently), you need to rename 
 file from bugs_refresh.json to bugs.json.  Then you can use your handy brower to 
 open the nova-bugs.html file and you should see the page and the new data.
 
+##Licensing
+This Project is licensed under the Apache License, Version 2.0 (the "License")
