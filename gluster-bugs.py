@@ -144,7 +144,7 @@ def main():
                              getBugPriority(task),
                              getBugStatus(task),
                              task.assigned_to,
-                             title,
+                             title.encode('ascii', 'ignore'),
                              task.weburl))
 
         except (TypeError, UnicodeEncodeError):
