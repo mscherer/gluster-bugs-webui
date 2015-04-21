@@ -12,7 +12,7 @@ for the next run.  Such errors look like the following
 
 Once the report is done (it takes about 1/2 hour currently), you need to rename the output 
 file from bugs_refresh.json to bugs.json.  Then you can use your handy brower to 
-open the nova-bugs.html file and you should see the page and the new data.
+open the gluster-bugs.html file and you should see the page and the new data.
 
 ##Licensing
 This Project is licensed under the Apache License, Version 2.0 (the "License")
