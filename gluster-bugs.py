@@ -138,14 +138,16 @@ def main():
                          '"status": "%s", '
                          '"owner": "%s", '
                          '"title": "%s", '
-                         '"link": "%s"' % (
+                         '"link": "%s", '
+                         '"component": "%s"' % (
                              counter,
                              task.id,
                              getBugPriority(task),
                              getBugStatus(task),
                              task.assigned_to,
                              title.encode('ascii', 'ignore'),
-                             task.weburl))
+                             task.weburl,
+                             task.component))
 
         except (TypeError, UnicodeEncodeError):
             # TODO: fix this

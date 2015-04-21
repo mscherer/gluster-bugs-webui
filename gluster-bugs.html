@@ -101,7 +101,14 @@ Search: <input type="text" id="query" ng-model="query"/>
                         ng-show="reverseSort">v</span></span>
                 </a>
             </th>
-            <th></th>
+            <th>
+                <a href="#"
+                   ng-click="orderByField='component'; reverseSort = !reverseSort">
+                    Component <span ng-show="orderByField == 'component'"><span
+                        ng-show="!reverseSort">^</span><span
+                        ng-show="reverseSort">v</span></span>
+                </a>
+            </th>
             <th>
                 <a href="#"
                    ng-click="orderByField='status'; reverseSort = !reverseSort">
@@ -149,7 +156,7 @@ Search: <input type="text" id="query" ng-model="query"/>
             <td class="bugnumber"> {{item.id}}</td>
             <td class="importance {{item.prio_class}}"> {{item.importance}}
             </td>
-            <td></td>
+            <td class="component"> {{item.component}}</td>
             <td nowrap class="status {{item.status_prio}}">{{item.status}}</td>
             <td> {{item.age}}</td>
             <td> {{item.update}}</td>
