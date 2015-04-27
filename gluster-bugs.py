@@ -12,9 +12,8 @@
 # License for the specific language governing permissions and limitations
 # under the License.
 #
-# nova_bugs.py pulls out all the bugs from the nova project in
-# launchpad and writes them to a file in JSON format.  This is based on
-# infra_bugday.py from the CI team
+# gluster-bugs.py pulls out all the bugs from the glusterfs project in
+# bugzilla and writes them to a file in JSON format.
 
 import argparse
 import datetime
@@ -23,14 +22,10 @@ import os
 import re
 import sys
 
-#from launchpadlib.launchpad import Launchpad
 from bugzilla import Bugzilla
 import requests
 
-LPCACHEDIR = os.path.expanduser(os.environ.get('LPCACHEDIR',
-                                               '~/.launchpadlib/cache'))
-LPPROJECT = os.environ.get('LPPROJECT',
-                           'GlusterFS')
+LPPROJECT = os.environ.get('LPPROJECT', 'GlusterFS')
 LPSTATUS = ('New', 'Confirmed', 'Triaged', 'In Progress')
 LPIMPORTANCE = ('Critical', 'High', 'Medium', 'Undecided', 'Low', 'Wishlist')
 
@@ -90,42 +85,20 @@ def getBugStatus(bug):
 
 def main():
     parser = argparse.ArgumentParser(description='pull all bugs from a '
-                                                 'launchpad project')
+                                                 'bugzilla project')
 
     args = parser.parse_args()
 
-#    launchpad = Launchpad.login_anonymously('OpenStack Infra Bugday',
-#                                            'production',
-#                                            LPCACHEDIR)
-#    project = launchpad.projects[LPPROJECT]
     bz = Bugzilla(url=BZURL)
 
     counter = 0
 
-    nova_status = "Unknown"
-
     f = open('bugs-refresh.json', 'w')
     f.write('{"date": "%s", "bugs": [' % datetime.datetime.now())
 
-#    for task in project.searchTasks(status=LPSTATUS, importance=LPIMPORTANCE,
-#                                    omit_duplicates=True,
-#                                    order_by='-importance'):
     bzq = bz.build_query(product=LPPROJECT, status=BZSTATUS)
-    #bzq = bz.build_query(bug_id='1154635')
     bugs = bz.query(bzq)
     for task in bugs:
-        #if counter == 300:
-        #    break
-#        bug = launchpad.load(task.bug_link)
-#
-#        nova_status = 'Unknown'
-#        nova_owner = 'Unknown'
-#
-#        for task in bug.bug_tasks:
-#            if task.bug_target_name == LPPROJECT:
-#                nova_status = task.status
-#                nova_owner = task.assignee
-#                break
         try:
             if counter != 0:
                 bug_data = ','
